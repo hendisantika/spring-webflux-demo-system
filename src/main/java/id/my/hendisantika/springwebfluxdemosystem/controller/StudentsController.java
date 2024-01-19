@@ -5,6 +5,7 @@ import id.my.hendisantika.springwebfluxdemosystem.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,4 +41,12 @@ public class StudentsController {
     public Flux<Student> getStudents() {
         return studentRepository.findAll();
     }
+
+    @GetMapping("/{studentId}")
+    public Mono<ResponseEntity<Student>> getStudentById(@PathVariable int studentId) {
+        return studentRepository.findById(studentId)
+                .map(student -> ResponseEntity.ok(student))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
 }

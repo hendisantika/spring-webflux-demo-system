@@ -1,1 +1,9 @@
 services:
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - '27018:27017'
+    volumes:
+      - dbdata6:/data/db
+volumes:
+  dbdata6:

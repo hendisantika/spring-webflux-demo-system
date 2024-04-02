@@ -6,3 +6,7 @@
 2. Navigate to the folder: `cd spring-webflux-demo-system`
 3. Run this application: `mvn clean spring-boot:run`
 4. Open your favorite browser: http://localhost:8080/swagger-ui
+
+### Swagger UI
+
+![Swagger UI](img/Swagger-UI.png "Swagger UI")

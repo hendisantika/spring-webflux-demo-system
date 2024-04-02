@@ -36,7 +36,7 @@ public class StudentsController {
     @PostMapping
     public Mono<ResponseEntity<Student>> create(@RequestBody Student student) {
         return studentRepository.save(student)
-                .map(savedStudent -> ResponseEntity.ok(savedStudent))
+                .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
@@ -46,14 +46,14 @@ public class StudentsController {
     }
 
     @GetMapping("/{studentId}")
-    public Mono<ResponseEntity<Student>> getStudentById(@PathVariable int studentId) {
+    public Mono<ResponseEntity<Student>> getStudentById(@PathVariable String studentId) {
         return studentRepository.findById(studentId)
-                .map(student -> ResponseEntity.ok(student))
+                .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{studentId}")
-    public Mono updateStudent(@PathVariable int studentId, @RequestBody Student student) {
+    public Mono updateStudent(@PathVariable String studentId, @RequestBody Student student) {
         return studentRepository.findById(studentId)
                 .flatMap(selectedStudentFromDB -> {
                     selectedStudentFromDB.setName(student.getName());
@@ -63,12 +63,12 @@ public class StudentsController {
 
                     return studentRepository.save(selectedStudentFromDB);
                 })
-                .map(updatedStudent -> ResponseEntity.ok(updatedStudent))
+                .map(ResponseEntity::ok)
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/student/{id}")
-    public Mono<ResponseEntity<Void>> deleteStudent(@PathVariable(value = "id") int studentId) {
+    public Mono<ResponseEntity<Void>> deleteStudent(@PathVariable(value = "id") String studentId) {
         return studentRepository.findById(studentId)
                 .flatMap(selectedStudentFromDB ->
                         studentRepository.delete(selectedStudentFromDB)

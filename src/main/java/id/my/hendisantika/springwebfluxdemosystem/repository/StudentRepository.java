@@ -13,5 +13,5 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
  * Time: 08:03
  * To change this template use File | Settings | File Templates.
  */
-public interface StudentRepository extends ReactiveMongoRepository<Student, Integer> {
+public interface StudentRepository extends ReactiveMongoRepository<Student, String> {
 }

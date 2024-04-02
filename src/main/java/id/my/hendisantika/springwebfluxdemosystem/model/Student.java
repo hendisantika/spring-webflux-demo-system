@@ -23,7 +23,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Student {
 
     @Id
-    private int id;
+    private String id;
     private String name;
     private int age;
     private String university;

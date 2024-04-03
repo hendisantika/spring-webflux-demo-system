@@ -6,6 +6,7 @@ import org.reactivestreams.Subscription;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import reactor.test.StepVerifier;
@@ -151,5 +152,17 @@ class SpringWebfluxDemoSystemApplicationTests {
         Thread.sleep(2000);
         intervalCF.subscribe(i -> System.out.printf("Subscriber B, value: %d%n", i));
         Thread.sleep(3000);
+    }
+
+    @Test
+    public void contextTest() {
+        String key = "key";
+        Mono<String> mono = Mono.just("anything")
+                .flatMap(s -> Mono.subscriberContext()
+                        .map(ctx -> "Value stored in context: " + ctx.get(key)))
+                .subscriberContext(ctx -> ctx.put(key, "myValue"));
+        StepVerifier.create(mono)
+                .expectNext("Value stored in context: myValue")
+                .verifyComplete();
     }
 }

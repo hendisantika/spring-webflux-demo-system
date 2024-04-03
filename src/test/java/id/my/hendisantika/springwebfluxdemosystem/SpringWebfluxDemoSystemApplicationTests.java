@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import org.springframework.boot.test.context.SpringBootTest;
+import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -137,6 +138,18 @@ class SpringWebfluxDemoSystemApplicationTests {
         intervalFlux.subscribe(i -> System.out.printf("Subscriber A, value: %d%n", i));
         Thread.sleep(2000);
         intervalFlux.subscribe(i -> System.out.printf("Subscriber B, value: %d%n", i));
+        Thread.sleep(3000);
+    }
+
+    @Test
+    public void hotPublisherExample() throws InterruptedException {
+        Flux<Long> intervalFlux = Flux.interval(Duration.ofSeconds(1));
+        ConnectableFlux<Long> intervalCF = intervalFlux.publish();
+        intervalCF.connect();
+        Thread.sleep(2000);
+        intervalCF.subscribe(i -> System.out.printf("Subscriber A, value: %d%n", i));
+        Thread.sleep(2000);
+        intervalCF.subscribe(i -> System.out.printf("Subscriber B, value: %d%n", i));
         Thread.sleep(3000);
     }
 }

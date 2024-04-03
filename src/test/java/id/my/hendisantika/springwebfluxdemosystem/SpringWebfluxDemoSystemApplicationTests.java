@@ -1,6 +1,8 @@
 package id.my.hendisantika.springwebfluxdemosystem;
 
 import org.junit.jupiter.api.Test;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Scheduler;
@@ -89,6 +91,41 @@ class SpringWebfluxDemoSystemApplicationTests {
                 .blockLast();
     }
 
+    @Test
+    public void backpressureExample() {
+        Flux.range(1, 5)
+                .subscribe(new Subscriber<Integer>() {
+                    int counter;
+                    private Subscription s;
 
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        System.out.println("onSubscribe");
+                        this.s = s;
+                        System.out.println("Requesting 2 emissions");
+                        s.request(2);
+                    }
+
+                    @Override
+                    public void onNext(Integer i) {
+                        System.out.println("onNext " + i);
+                        counter++;
+                        if (counter % 2 == 0) {
+                            System.out.println("Requesting 2 emissions");
+                            s.request(2);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        System.err.println("onError");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("onComplete");
+                    }
+                });
+    }
 
 }

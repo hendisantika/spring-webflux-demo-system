@@ -9,6 +9,8 @@ import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import reactor.test.StepVerifier;
 
+import java.time.Duration;
+
 @SpringBootTest
 class SpringWebfluxDemoSystemApplicationTests {
 
@@ -128,4 +130,13 @@ class SpringWebfluxDemoSystemApplicationTests {
                 });
     }
 
+    @Test
+    public void coldPublisherExample() throws InterruptedException {
+        Flux<Long> intervalFlux = Flux.interval(Duration.ofSeconds(1));
+        Thread.sleep(2000);
+        intervalFlux.subscribe(i -> System.out.printf("Subscriber A, value: %d%n", i));
+        Thread.sleep(2000);
+        intervalFlux.subscribe(i -> System.out.printf("Subscriber B, value: %d%n", i));
+        Thread.sleep(3000);
+    }
 }

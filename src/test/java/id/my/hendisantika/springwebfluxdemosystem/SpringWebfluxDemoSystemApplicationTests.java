@@ -32,4 +32,13 @@ class SpringWebfluxDemoSystemApplicationTests {
         fluxCalc.subscribe(value -> System.out.println("Next: " + value),
                 error -> System.err.println("Error: " + error));
     }
+
+    @Test
+    public void onErrorReturnExample() {
+        Flux<String> fluxCalc = Flux.just(-1, 0, 1)
+                .map(i -> "10 / " + i + " = " + (10 / i))
+                .onErrorReturn(ArithmeticException.class, "Division by 0 not allowed");
+        fluxCalc.subscribe(value -> System.out.println("Next: " + value),
+                error -> System.err.println("Error: " + error));
+    }
 }

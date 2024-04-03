@@ -3,6 +3,7 @@ package id.my.hendisantika.springwebfluxdemosystem;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 @SpringBootTest
 class SpringWebfluxDemoSystemApplicationTests {
@@ -40,5 +41,15 @@ class SpringWebfluxDemoSystemApplicationTests {
                 .onErrorReturn(ArithmeticException.class, "Division by 0 not allowed");
         fluxCalc.subscribe(value -> System.out.println("Next: " + value),
                 error -> System.err.println("Error: " + error));
+    }
+
+    @Test
+    public void stepVerifierTest() {
+        Flux<String> fluxCalc = Flux.just(-1, 0, 1)
+                .map(i -> "10 / " + i + " = " + (10 / i));
+        StepVerifier.create(fluxCalc)
+                .expectNextCount(1)
+                .expectError(ArithmeticException.class)
+                .verify();
     }
 }

@@ -16,4 +16,12 @@ class SpringWebfluxDemoSystemApplicationTests {
         Flux<String> fluxColors = Flux.just("red", "green", "blue");
         fluxColors.subscribe(System.out::println);
     }
+
+    @Test
+    void zipExample() {
+        Flux<String> fluxFruits = Flux.just("apple", "pear", "plum");
+        Flux<String> fluxColors = Flux.just("red", "green", "blue");
+        Flux<Integer> fluxAmounts = Flux.just(10, 20, 30);
+        Flux.zip(fluxFruits, fluxColors, fluxAmounts).subscribe(System.out::println);
+    }
 }
